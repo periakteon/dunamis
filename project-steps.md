@@ -50,7 +50,7 @@
   - **Step Dependencies**: Step 3
   - **User Instructions**: None
 
-- [ ] Step 5: Implement HTTP Method Decorators
+- [x] Step 5: Implement HTTP Method Decorators
 
   - **Task**: Create @Get, @Post, @Put, @Delete, and @Patch decorators for HTTP methods
   - **Files**:

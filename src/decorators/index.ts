@@ -5,7 +5,8 @@
 // Controller decorators
 export * from "./controller";
 
-// Method decorators will be added in Step 5
+// Method decorators
+export * from "./method";
 
 // Parameter decorators will be added in Steps 6-7
 
