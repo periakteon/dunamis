@@ -106,6 +106,46 @@ describe("MetadataStorage", () => {
     expect(methodMiddlewares[0]).toEqual(methodMiddleware);
   });
 
+  it("should return empty array when no controller middleware exists", () => {
+    // Testing line 89 in MetadataStorage.ts - returning empty array when no middleware exists
+    const result = metadataStorage.getControllerMiddleware(TestController);
+    expect(result).toBeInstanceOf(Array);
+    expect(result).toHaveLength(0);
+  });
+
+  it("should retrieve multiple controller middleware in order", () => {
+    const middlewareFn1 = (req: Request, res: Response, next: NextFunction) => { next(); };
+    const middlewareFn2 = (req: Request, res: Response, next: NextFunction) => { next(); };
+    const middlewareFn3 = (req: Request, res: Response, next: NextFunction) => { next(); };
+    
+    const controllerMiddleware1: MiddlewareMetadata = {
+      target: TestController,
+      middleware: middlewareFn1
+    };
+    
+    const controllerMiddleware2: MiddlewareMetadata = {
+      target: TestController,
+      middleware: middlewareFn2
+    };
+    
+    const controllerMiddleware3: MiddlewareMetadata = {
+      target: TestController,
+      middleware: middlewareFn3
+    };
+    
+    // Add multiple middleware
+    metadataStorage.addMiddlewareMetadata(controllerMiddleware1);
+    metadataStorage.addMiddlewareMetadata(controllerMiddleware2);
+    metadataStorage.addMiddlewareMetadata(controllerMiddleware3);
+    
+    // Retrieve and verify
+    const result = metadataStorage.getControllerMiddleware(TestController);
+    expect(result).toHaveLength(3);
+    expect(result[0]).toEqual(controllerMiddleware1);
+    expect(result[1]).toEqual(controllerMiddleware2);
+    expect(result[2]).toEqual(controllerMiddleware3);
+  });
+
   it("should clear all metadata", () => {
     // Add some metadata
     metadataStorage.addControllerMetadata({
@@ -119,5 +159,29 @@ describe("MetadataStorage", () => {
     
     // Verify it's all gone
     expect(metadataStorage.getControllers()).toHaveLength(0);
+  });
+
+  it("should use correct controller key to retrieve middleware", () => {
+    const middlewareFn = (req: Request, res: Response, next: NextFunction) => { next(); };
+    
+    // Create a mock class to ensure we're testing the exact key generation logic
+    class SpecificController {}
+    
+    const middleware: MiddlewareMetadata = {
+      target: SpecificController,
+      middleware: middlewareFn
+    };
+    
+    metadataStorage.addMiddlewareMetadata(middleware);
+    
+    // This directly tests the key generation and retrieval in lines 88-89
+    const result = metadataStorage.getControllerMiddleware(SpecificController);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toBe(middleware);
+    
+    // Verify the key specificity by showing a different controller gets empty results
+    class DifferentController {}
+    const differentResult = metadataStorage.getControllerMiddleware(DifferentController);
+    expect(differentResult).toHaveLength(0);
   });
 }); 
