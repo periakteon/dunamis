@@ -3,10 +3,9 @@ description: Follow these rules for every request
 globs: 
 alwaysApply: true
 ---
-
 # General Rules for Every Request
 
-- We are developing a minimalist HTTP framework similar to routing-controllers based on Express.js.
+- We are developing a minimalist HTTP framework (Dunamis.js) similar to routing-controllers based on Express.js.
 - Find the general project briefing in [project-briefing.md](mdc:project-briefing.md)
 - Find the steps in [project-steps.md](mdc:project-steps.md)
 - Work on whatever step(s) I tell you to work on and only work on those steps at once

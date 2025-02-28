@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /**
- * Type definitions for @periakteon/framework
+ * Type definitions for @periakteon/dunamisjs
  */
 
 import { Request, Response, NextFunction, RequestHandler } from "express";

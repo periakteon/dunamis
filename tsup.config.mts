@@ -11,7 +11,7 @@ export default defineConfig({
   minify: true,
   esbuildOptions(options) {
     options.banner = {
-      js: '// @periakteon/framework - A lightweight, decorator-based routing framework for Express.js',
+      js: '// @periakteon/dunamisjs - A lightweight, decorator-based routing framework for Express.js',
     };
   },
 }); 

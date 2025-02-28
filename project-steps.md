@@ -28,7 +28,7 @@
 
 ## Core Decorator System
 
-- [ ] Step 3: Implement Metadata Storage
+- [x] Step 3: Implement Metadata Storage
 
   - **Task**: Create a metadata storage system to track decorated controllers and methods
   - **Files**:

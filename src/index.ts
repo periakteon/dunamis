@@ -1,5 +1,5 @@
 /**
- * @periakteon/framework
+ * @periakteon/dunamisjs
  *
  * A lightweight, decorator-based routing framework for Express.js.
  * This library provides a modern, TypeScript-first approach to defining
@@ -9,19 +9,25 @@
 // Require reflect-metadata at the entry point
 import "reflect-metadata";
 
-// Export placeholder - will be populated as we implement features
+// Export version
 export const version = "1.0.0";
 
-// This file will export all public API components
+// Export metadata storage and types
+export { MetadataStorage } from "./metadata/MetadataStorage";
+export * from "./metadata/types";
+
+// Export constants
+export * from "./constants";
+
+// Export utility functions
+export * from "./utils/metadata";
+
+// Export types
+export * from "./types";
+
+// This file will export all public API components as they are implemented
 // Future exports:
 // - Controller decorators (@JSONController)
 // - Method decorators (@Get, @Post, etc.)
 // - Parameter decorators (@Param, @Body, etc.)
 // - Express integration (createExpressApp)
-// - And more...
-
-function hello(): void {
-  console.warn("Hello, world!");
-}
-
-hello();
