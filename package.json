@@ -10,8 +10,8 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup src/index.ts",
-    "dev": "tsup --watch",
+    "build": "tsup src/index.ts --format esm,cjs --dts --sourcemap",
+    "dev": "tsup src/index.ts --format esm,cjs --dts --sourcemap --watch",
     "test": "vitest run --reporter verbose",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
