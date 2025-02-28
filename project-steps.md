@@ -36,6 +36,7 @@
     - `src/metadata/types.ts`: Types for stored metadata
     - `src/constants.ts`: Constants used throughout the framework
     - `src/utils/metadata.ts`: Utility functions for metadata handling
+    - `tests/metadata/MetadataStorage.test.ts`: Tests for metadata storage
   - **Step Dependencies**: Step 2
   - **User Instructions**: None
 
