@@ -25,9 +25,11 @@ export * from "./utils/metadata";
 // Export types
 export * from "./types";
 
+// Export decorators
+export * from "./decorators";
+
 // This file will export all public API components as they are implemented
 // Future exports:
-// - Controller decorators (@JSONController)
-// - Method decorators (@Get, @Post, etc.)
-// - Parameter decorators (@Param, @Body, etc.)
-// - Express integration (createExpressApp)
+// - Method decorators (@Get, @Post, etc.) - Coming in Step 5
+// - Parameter decorators (@Param, @Body, etc.) - Coming in Steps 6-7
+// - Express integration (createExpressApp) - Coming in Steps 8-9

@@ -40,7 +40,7 @@
   - **Step Dependencies**: Step 2
   - **User Instructions**: None
 
-- [ ] Step 4: Implement Controller Decorators
+- [x] Step 4: Implement Controller Decorators
 
   - **Task**: Create the @JSONController decorator for defining controller classes
   - **Files**:
