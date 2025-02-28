@@ -43,7 +43,7 @@ function createMethodDecorator(httpMethod: HttpMethod, pathOrOptions: string | M
   return function (
     target: object,
     methodName: string,
-    _descriptor: PropertyDescriptor
+    _descriptor?: TypedPropertyDescriptor<() => void>
   ): void {
     // Get the constructor from the prototype
     const constructor = target.constructor as ClassConstructor;
