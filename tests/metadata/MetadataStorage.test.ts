@@ -6,8 +6,9 @@ import {
   ParameterMetadata,
   MiddlewareMetadata
 } from "../../src/metadata/types";
-import { ParameterType } from "../../src/constants";
+import { ParameterType, METADATA_KEY } from "../../src/constants";
 import { Request, Response, NextFunction } from "express";
+import { defineMetadata } from "../../src/utils/metadata";
 
 class TestController {
   testMethod(): void {}
@@ -183,5 +184,77 @@ describe("MetadataStorage", () => {
     class DifferentController {}
     const differentResult = metadataStorage.getControllerMiddleware(DifferentController);
     expect(differentResult).toHaveLength(0);
+  });
+
+  it("should correctly identify controllers with isController method", () => {
+    // Create two test classes
+    class ControllerClass {}
+    class NonControllerClass {}
+    
+    // Set metadata on the controller class
+    defineMetadata(METADATA_KEY.CONTROLLER, true, ControllerClass);
+    
+    // Test isController method
+    expect(metadataStorage.isController(ControllerClass)).toBe(true);
+    expect(metadataStorage.isController(NonControllerClass)).toBe(false);
+  });
+
+  // Test for line 122 - getControllerMethodMetadata returning empty array when no methods are registered
+  it("should return empty array from getControllerMethodMetadata when no methods are registered", () => {
+    class EmptyController {}
+    
+    const methods = metadataStorage.getControllerMethodMetadata(EmptyController);
+    expect(methods).toBeInstanceOf(Array);
+    expect(methods).toHaveLength(0);
+  });
+
+  // Test specifically for line 122 - the spreading of method metadata into results
+  it("should correctly spread method metadata into results array in getControllerMethodMetadata", () => {
+    class MethodController {
+      method1(): void {}
+      method2(): void {}
+    }
+    
+    // Add method metadata for only one of the methods
+    const methodMetadata: MethodMetadata = {
+      target: MethodController,
+      method: "method1",
+      httpMethod: "get",
+      path: "/test",
+      middleware: []
+    };
+    
+    metadataStorage.addMethodMetadata(methodMetadata);
+    
+    // Call getControllerMethodMetadata which will process both methods
+    // but only one has metadata (tests the || [] fallback and spreading)
+    const methods = metadataStorage.getControllerMethodMetadata(MethodController);
+    
+    // Verify results
+    expect(methods).toBeInstanceOf(Array);
+    expect(methods).toHaveLength(1);
+    expect(methods[0]).toEqual(methodMetadata);
+  });
+
+  // Test for line 141 - getMethodParameterMetadata returning empty array when no parameters are registered
+  it("should return empty array from getMethodParameterMetadata when no parameters are registered", () => {
+    class NoParamsController {
+      testMethod(): void {}
+    }
+    
+    const params = metadataStorage.getMethodParameterMetadata(NoParamsController, "testMethod");
+    expect(params).toBeInstanceOf(Array);
+    expect(params).toHaveLength(0);
+  });
+
+  // Test for line 164 - getMethodMiddleware returning empty array when no middleware is registered
+  it("should return empty array from getMethodMiddleware when no middleware is registered", () => {
+    class NoMiddlewareController {
+      testMethod(): void {}
+    }
+    
+    const middleware = metadataStorage.getMethodMiddleware(NoMiddlewareController, "testMethod");
+    expect(middleware).toBeInstanceOf(Array);
+    expect(middleware).toHaveLength(0);
   });
 }); 
