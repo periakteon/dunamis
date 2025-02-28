@@ -80,7 +80,7 @@ describe("MetadataStorage", () => {
   });
 
   it("should add and retrieve middleware metadata", () => {
-    const middlewareFn = (req: Request, res: Response, next: NextFunction) => { next(); };
+    const middlewareFn = (req: Request, res: Response, next: NextFunction): void => { next(); };
     
     // Controller level middleware
     const controllerMiddleware: MiddlewareMetadata = {
@@ -115,9 +115,9 @@ describe("MetadataStorage", () => {
   });
 
   it("should retrieve multiple controller middleware in order", () => {
-    const middlewareFn1 = (req: Request, res: Response, next: NextFunction) => { next(); };
-    const middlewareFn2 = (req: Request, res: Response, next: NextFunction) => { next(); };
-    const middlewareFn3 = (req: Request, res: Response, next: NextFunction) => { next(); };
+    const middlewareFn1 = (req: Request, res: Response, next: NextFunction): void => { next(); };
+    const middlewareFn2 = (req: Request, res: Response, next: NextFunction): void => { next(); };
+    const middlewareFn3 = (req: Request, res: Response, next: NextFunction): void => { next(); };
     
     const controllerMiddleware1: MiddlewareMetadata = {
       target: TestController,
@@ -163,7 +163,7 @@ describe("MetadataStorage", () => {
   });
 
   it("should use correct controller key to retrieve middleware", () => {
-    const middlewareFn = (req: Request, res: Response, next: NextFunction) => { next(); };
+    const middlewareFn = (req: Request, res: Response, next: NextFunction): void => { next(); };
     
     // Create a mock class to ensure we're testing the exact key generation logic
     class SpecificController {}
