@@ -1,6 +1,6 @@
 {
   "name": "@periakteon/dunamisjs",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -19,7 +19,8 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\"",
     "lint:fix": "eslint src --ext .ts --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "semantic-release": "semantic-release"
   },
   "author": "Masum Gökyüz",
   "license": "MIT",
@@ -43,6 +44,13 @@
     "express-session": "^1.18.1",
     "prettier": "^3.2.5",
     "rimraf": "^6.0.1",
+    "semantic-release": "^23.0.2",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.2.5",
+    "@semantic-release/npm": "^11.0.2",
+    "@semantic-release/commit-analyzer": "^11.1.0",
+    "@semantic-release/release-notes-generator": "^12.1.0",
     "supertest": "^7.0.0",
     "tsup": "8.0.2",
     "typescript": "5.7.2",

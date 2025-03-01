@@ -641,6 +641,46 @@ const app = createExpressApp({
 - `@ErrorHandler()`: Enables error handling for a controller
 - `HttpError`: Custom error class for HTTP errors
 
+## Contributing
+
+Contributions are welcome! Please feel free to submit pull requests.
+
+## Release Process
+
+This project uses [semantic-release](https://github.com/semantic-release/semantic-release) for automatic versioning and package publishing. The release process is triggered automatically when commits are pushed to the `main` branch.
+
+### Commit Message Format
+
+We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification which is used by semantic-release to determine the next version number and generate changelogs. Your commit messages should be structured as follows:
+
+```
+<type>(<scope>): <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+Types that trigger releases:
+
+- `fix:` - represents bug fixes (correlates to PATCH in SemVer)
+- `feat:` - represents a new feature (correlates to MINOR in SemVer)
+- `feat!:`, `fix!:`, `refactor!:`, etc. - represents breaking changes (correlates to MAJOR in SemVer)
+
+Examples:
+
+- `fix(router): fix route parameter extraction`
+- `feat(decorators): add new @Session() decorator`
+- `feat!: redesign middleware API`
+
+Other types that don't trigger releases:
+
+- `docs:` - documentation changes
+- `style:` - changes that don't affect code functionality (formatting, etc.)
+- `refactor:` - code changes that neither fix bugs nor add features
+- `test:` - adding or correcting tests
+- `chore:` - maintenance tasks
+
 ## License
 
 MIT
