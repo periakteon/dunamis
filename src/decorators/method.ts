@@ -28,6 +28,9 @@ export interface MethodOptions {
 
 /**
  * Base decorator factory for HTTP methods
+ * 
+ * Note: This implementation supports both TypeScript 5.0 Stage 3 decorators
+ * and the previous Stage 2 decorator format for backward compatibility.
  *
  * @param httpMethod - HTTP method to use (GET, POST, etc.)
  * @param pathOrOptions - Either a route path string or options object
@@ -40,13 +43,25 @@ function createMethodDecorator(httpMethod: HttpMethod, pathOrOptions: string | M
   const path = options.path || "";
   const middleware = options.middleware || [];
 
-  return function (
-    target: object,
-    methodName: string,
-    _descriptor?: TypedPropertyDescriptor<() => void>
-  ): void {
-    // Get the constructor from the prototype
-    const constructor = target.constructor as ClassConstructor;
+  // This function signature supports both Stage 2 and Stage 3 decorators
+  return function(
+    target: object | (new (...args: any[]) => any),
+    methodNameOrContext: string | symbol | ClassMethodDecoratorContext,
+    _descriptor?: PropertyDescriptor
+  ): void | undefined {
+    let methodName: string;
+    let constructor: ClassConstructor;
+
+    // Handle both Stage 3 and Stage 2 decorator formats
+    if (typeof methodNameOrContext === 'string' || typeof methodNameOrContext === 'symbol') {
+      // Stage 2 decorator format
+      methodName = methodNameOrContext.toString();
+      constructor = target.constructor as ClassConstructor;
+    } else {
+      // Stage 3 decorator format (TypeScript 5.0+)
+      methodName = methodNameOrContext.name.toString();
+      constructor = (target as object).constructor as ClassConstructor;
+    }
 
     // Store metadata on the method
     defineMetadata(METADATA_KEY.METHOD, httpMethod, constructor, methodName);
@@ -63,6 +78,9 @@ function createMethodDecorator(httpMethod: HttpMethod, pathOrOptions: string | M
     };
 
     MetadataStorage.getInstance().addMethodMetadata(metadata);
+
+    // For Stage 3 decorators, return undefined to keep the original method
+    return undefined;
   };
 }
 
