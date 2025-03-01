@@ -8,7 +8,7 @@
 
 import { ClassConstructor, MiddlewareFunction } from "../types";
 import { MetadataStorage } from "../metadata/MetadataStorage";
-import { ControllerMetadata } from "../metadata/types";
+import { ControllerMetadata, MiddlewareMetadata } from "../metadata/types";
 import { METADATA_KEY } from "../constants";
 import { defineMetadata } from "../utils/metadata";
 
@@ -57,7 +57,6 @@ export function JSONController(prefixOrOptions: string | JSONControllerOptions =
   const prefix = options.prefix || "";
   const middleware = options.middleware || [];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function <T extends { new (...args: any[]): any }>(target: T): void {
     // Store metadata on the controller class
     defineMetadata(METADATA_KEY.CONTROLLER, true, target);
@@ -72,5 +71,16 @@ export function JSONController(prefixOrOptions: string | JSONControllerOptions =
     };
 
     MetadataStorage.getInstance().addControllerMetadata(metadata);
+    
+    // Register middleware metadata for each middleware function
+    const metadataStorage = MetadataStorage.getInstance();
+    for (const middlewareFn of middleware) {
+      const middlewareMetadata: MiddlewareMetadata = {
+        target: target as ClassConstructor,
+        middleware: middlewareFn,
+      };
+      
+      metadataStorage.addMiddlewareMetadata(middlewareMetadata);
+    }
   };
 }

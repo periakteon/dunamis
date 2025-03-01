@@ -1,9 +1,10 @@
 /**
  * Express integration for Dunamis.js
  *
- * This module provides utilities for integrating Dunamis.js with Express.
+ * This module exports the Express integration components of the framework.
  */
 
 export * from "./types";
-export * from "./ExpressRouteRegistry";
 export * from "./createExpressApp";
+export * from "./ExpressRouteRegistry";
+export * from "./middleware";

@@ -19,6 +19,7 @@ import {
   Request,
 } from "./types";
 import express from "express";
+import { convertMiddlewareToHandlers } from "./middleware";
 
 /**
  * Express route registry for registering controllers and routes
@@ -132,7 +133,15 @@ export class ExpressRouteRegistry {
 
     // Apply controller-level middleware if any
     const controllerMiddleware = controllerMetadata.middleware || [];
-    const controllerMiddlewareHandlers = controllerMiddleware as RequestHandler[];
+    
+    // Get additional middleware from metadata storage
+    const additionalMiddleware = this.metadataStorage.getControllerMiddleware(controllerMetadata.target);
+    for (const middleware of additionalMiddleware) {
+      controllerMiddleware.push(middleware.middleware);
+    }
+    
+    // Convert middleware functions to Express request handlers
+    const controllerMiddlewareHandlers = convertMiddlewareToHandlers(controllerMiddleware);
 
     // Register each method route
     for (const metadata of methodMetadata) {
@@ -160,10 +169,22 @@ export class ExpressRouteRegistry {
     const routePath = buildRoutePath(basePath, methodMetadata.path);
 
     // Get method-level middleware
-    const methodMiddleware = (methodMetadata.middleware as RequestHandler[]) || [];
+    const methodMiddleware = methodMetadata.middleware || [];
+    
+    // Get additional middleware from metadata storage
+    const additionalMiddleware = this.metadataStorage.getMethodMiddleware(
+      methodMetadata.target,
+      methodMetadata.method
+    );
+    for (const middleware of additionalMiddleware) {
+      methodMiddleware.push(middleware.middleware);
+    }
+    
+    // Convert method middleware to Express request handlers
+    const methodMiddlewareHandlers = convertMiddlewareToHandlers(methodMiddleware);
 
     // Combine middleware (controller middleware runs first, then method middleware)
-    const middleware = [...controllerMiddleware, ...methodMiddleware];
+    const middleware = [...controllerMiddleware, ...methodMiddlewareHandlers];
 
     // Create the route handler
     const handler = this.createRouteHandler(methodMetadata.target, methodMetadata.method, instance);
