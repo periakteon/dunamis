@@ -17,9 +17,9 @@ export function normalizePath(path: string): string {
   // Ensure path starts with slash
   let normalizedPath = path.startsWith("/") ? path : `/${path}`;
 
-  // Remove trailing slash unless it's the root path
-  if (normalizedPath.length > 1 && normalizedPath.endsWith("/")) {
-    normalizedPath = normalizedPath.slice(0, -1);
+  // Remove trailing slashes unless it's the root path
+  if (normalizedPath.length > 1) {
+    normalizedPath = normalizedPath.replace(/\/+$/, "");
   }
 
   return normalizedPath;
