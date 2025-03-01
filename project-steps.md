@@ -46,7 +46,7 @@
   - **Files**:
     - `src/decorators/controller.ts`: Controller decorator definitions
     - `src/decorators/index.ts`: Export file for decorators
-    - `test/decorators/controller.test.ts`: Tests for controller decorators
+    - `tests/decorators/controller.test.ts`: Tests for controller decorators
   - **Step Dependencies**: Step 3
   - **User Instructions**: None
 
@@ -56,7 +56,7 @@
   - **Files**:
     - `src/decorators/method.ts`: HTTP method decorator definitions
     - `src/metadata/MethodMetadata.ts`: Method metadata storage
-    - `test/decorators/method.test.ts`: Tests for method decorators
+    - `tests/decorators/method.test.ts`: Tests for method decorators
   - **Step Dependencies**: Step 4
   - **User Instructions**: None
 
@@ -66,15 +66,16 @@
   - **Files**:
     - `src/decorators/param.ts`: Parameter decorator definitions
     - `src/metadata/ParamMetadata.ts`: Parameter metadata storage
-    - `test/decorators/param.test.ts`: Tests for parameter decorators
+    - `tests/decorators/param.test.ts`: Tests for parameter decorators
   - **Step Dependencies**: Step 5
   - **User Instructions**: None
 
 - [x] Step 7: Implement Parameter Decorators - Advanced
+
   - **Task**: Create @Req, @Res, @Headers decorators for accessing request/response objects
   - **Files**:
     - `src/decorators/param.ts`: (Update) Add new parameter decorators
-    - `test/decorators/param-advanced.test.ts`: Tests for advanced parameter decorators
+    - `tests/decorators/param-advanced.test.ts`: Tests for advanced parameter decorators
   - **Step Dependencies**: Step 6
   - **User Instructions**: None
 
@@ -87,17 +88,17 @@
     - `src/express/ExpressRouteRegistry.ts`: Express route registration
     - `src/express/types.ts`: Types for Express integration
     - `src/utils/route.ts`: Route path utilities
-    - `test/express/registry.test.ts`: Tests for route registration
+    - `tests/express/registry.test.ts`: Tests for route registration
   - **Step Dependencies**: Step 7
   - **User Instructions**: None
 
-- [ ] Step 9: Create Application Bootstrap Function
+- [x] Step 9: Create Application Bootstrap Function
 
   - **Task**: Implement the createExpressApp function for easy setup and bootstrapping
   - **Files**:
     - `src/express/createExpressApp.ts`: Main setup function
     - `src/express/index.ts`: Export file for Express utilities
-    - `test/express/createApp.test.ts`: Tests for app creation
+    - `tests/express/createApp.test.ts`: Tests for app creation
   - **Step Dependencies**: Step 8
   - **User Instructions**: None
 
@@ -107,7 +108,7 @@
     - `src/decorators/middleware.ts`: Middleware decorators
     - `src/metadata/MiddlewareMetadata.ts`: Middleware metadata storage
     - `src/express/middleware.ts`: Middleware handling utilities
-    - `test/decorators/middleware.test.ts`: Tests for middleware decorators
+    - `tests/decorators/middleware.test.ts`: Tests for middleware decorators
   - **Step Dependencies**: Step 9
   - **User Instructions**: None
 
