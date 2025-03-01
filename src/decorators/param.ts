@@ -150,3 +150,62 @@ export function Query(name: string, options?: ParameterOptions) {
 export function Body(name?: string, options?: ParameterOptions) {
   return createParameterDecorator(ParameterType.BODY, name, options);
 }
+
+/**
+ * Injects the Express request object into the parameter.
+ *
+ * @param options - Optional parameter options
+ * @returns Parameter decorator
+ *
+ * @example
+ * @Get('/profile')
+ * getProfile(@Req() req: express.Request) {
+ *   // Access the Express request object
+ *   const userId = req.user?.id;
+ *   return this.userService.findById(userId);
+ * }
+ */
+export function Req(options?: ParameterOptions) {
+  return createParameterDecorator(ParameterType.REQUEST, undefined, options);
+}
+
+/**
+ * Injects the Express response object into the parameter.
+ *
+ * @param options - Optional parameter options
+ * @returns Parameter decorator
+ *
+ * @example
+ * @Get('/download')
+ * download(@Res() res: express.Response) {
+ *   // Access the Express response object
+ *   return res.download('/path/to/file.pdf');
+ * }
+ */
+export function Res(options?: ParameterOptions) {
+  return createParameterDecorator(ParameterType.RESPONSE, undefined, options);
+}
+
+/**
+ * Extracts all headers or a specific header from the request.
+ *
+ * @param name - Optional name of a specific header
+ * @param options - Optional parameter options
+ * @returns Parameter decorator
+ *
+ * @example
+ * // Extract all headers
+ * @Get('/headers')
+ * getAllHeaders(@Headers() headers: any) {
+ *   return { headers };
+ * }
+ *
+ * // Extract specific header
+ * @Get('/auth')
+ * checkAuth(@Headers('authorization') token: string) {
+ *   return this.authService.validateToken(token);
+ * }
+ */
+export function Headers(name?: string, options?: ParameterOptions) {
+  return createParameterDecorator(ParameterType.HEADERS, name, options);
+}
