@@ -8,23 +8,24 @@ import { MetadataStorage } from "../../src/metadata/MetadataStorage";
 import { ParamMetadata } from "../../src/metadata/ParamMetadata";
 import { METADATA_KEY, ParameterType } from "../../src/constants";
 import { getMetadata } from "../../src/utils/metadata";
+import { Request, Response } from "express";
 
 // Helper function to create test controller classes with advanced params
 function createAdvancedController() {
   @JSONController("/api")
   class AdvancedController {
     @Get("/request")
-    requestMethod(@Req() request: any): void {
+    requestMethod(@Req() request: Request): void {
       // Method implementation
     }
 
     @Post("/response")
-    responseMethod(@Res() response: any): void {
+    responseMethod(@Res() response: Response): void {
       // Method implementation
     }
 
     @Get("/headers")
-    headersMethod(@Headers() headers: any): void {
+    headersMethod(@Headers() headers: Record<string, string>): void {
       // Method implementation
     }
 
@@ -35,9 +36,9 @@ function createAdvancedController() {
 
     @Get("/mixed")
     mixedMethod(
-      @Req() req: any,
+      @Req() req: Request,
       @Headers("content-type") contentType: string,
-      @Res() res: any
+      @Res() res: Response
     ): void {
       // Method implementation
     }
