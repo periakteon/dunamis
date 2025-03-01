@@ -240,7 +240,7 @@ export class ExpressRouteRegistry {
         return req => req;
 
       case ParameterType.RESPONSE:
-        return (_, res) => res;
+        return (_req, res) => res;
 
       case ParameterType.BODY:
         return req => {

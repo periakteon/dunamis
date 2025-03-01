@@ -2,7 +2,7 @@ import type { Router, Request as ExpressRequest, Response, RequestHandler } from
 import type { ClassConstructor, MiddlewareFunction } from "../types";
 
 /**
- * Extended Request type with session support
+ * Extended Request type with session support (for express-session)
  */
 export interface Request extends ExpressRequest {
   session?: Record<string, any>;
