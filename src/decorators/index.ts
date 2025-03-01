@@ -8,6 +8,7 @@ export * from "./controller";
 // Method decorators
 export * from "./method";
 
-// Parameter decorators will be added in Steps 6-7
+// Parameter decorators
+export * from "./param";
 
 // Middleware decorators will be added in Step 10

@@ -60,7 +60,7 @@
   - **Step Dependencies**: Step 4
   - **User Instructions**: None
 
-- [ ] Step 6: Implement Parameter Decorators - Basic
+- [x] Step 6: Implement Parameter Decorators - Basic
 
   - **Task**: Create @Param, @Query, @Body decorators for accessing request data
   - **Files**:

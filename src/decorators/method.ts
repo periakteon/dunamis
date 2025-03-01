@@ -28,7 +28,7 @@ export interface MethodOptions {
 
 /**
  * Base decorator factory for HTTP methods
- * 
+ *
  * Note: This implementation supports both TypeScript 5.0 Stage 3 decorators
  * and the previous Stage 2 decorator format for backward compatibility.
  *
@@ -44,7 +44,7 @@ function createMethodDecorator(httpMethod: HttpMethod, pathOrOptions: string | M
   const middleware = options.middleware || [];
 
   // This function signature supports both Stage 2 and Stage 3 decorators
-  return function(
+  return function (
     target: object | (new (...args: any[]) => any),
     methodNameOrContext: string | symbol | ClassMethodDecoratorContext,
     _descriptor?: PropertyDescriptor
@@ -53,7 +53,7 @@ function createMethodDecorator(httpMethod: HttpMethod, pathOrOptions: string | M
     let constructor: ClassConstructor;
 
     // Handle both Stage 3 and Stage 2 decorator formats
-    if (typeof methodNameOrContext === 'string' || typeof methodNameOrContext === 'symbol') {
+    if (typeof methodNameOrContext === "string" || typeof methodNameOrContext === "symbol") {
       // Stage 2 decorator format
       methodName = methodNameOrContext.toString();
       constructor = target.constructor as ClassConstructor;
