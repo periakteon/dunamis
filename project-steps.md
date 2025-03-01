@@ -120,3 +120,22 @@
   - **Files**:
     - `src/validation/zod.ts`: Zod integration utilities
     - `src/decorators/validation.ts`: Validation decorators
+    - `tests/validation/zod.test.ts`: Tests for Zod validation
+  - **Step Dependencies**: Step 10
+  - **User Instructions**: None
+
+## Error Handling
+
+- [ ] Step 12: Implement Error Handling System
+
+  - **Task**: Create system for handling errors in a centralized way
+  - **Files**:
+    - `src/error/ErrorHandler.ts`: Error handling utilities
+    - `src/decorators/error.ts`: Error handling decorators
+    - `tests/error/error.test.ts`: Tests for error handling
+  - **Step Dependencies**: Step 11
+  - **User Instructions**: None
+
+## README
+
+- [ ] Step 13: Update README.md in a way that is easy to understand for users who want to use the framework. Mention that the framework is still under development and that the documentation will be improved in the future. Provide a basic example of how to use the framework and detailed documentation on how to use the different decorators.
