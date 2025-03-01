@@ -13,6 +13,7 @@ import { Body, Param, Query, Req, Res } from '../../src/decorators/param';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import { ParameterType } from '../../src/constants';
+import { UseMiddleware } from '../../src/decorators/middleware';
 
 // Create test decorators for cookies and session since they're not exported yet
 function Cookies(name?: string) {
@@ -958,5 +959,62 @@ describe('ExpressRouteRegistry', () => {
     // Test with mock req and res objects to ensure comprehensive coverage
     const mockRes = { status: vi.fn() };
     expect(invalidParameterFactory(mockReq, mockRes)).toBeUndefined();
+  });
+
+  it('should add middleware from metadata storage to methodMiddleware array (lines 179-181)', async () => {    
+    // Create middleware functions
+    const firstMiddleware = vi.fn((_req, _res, next) => next());
+    const secondMiddleware = vi.fn((_req, _res, next) => next());
+    
+    // Define a controller with method middleware using the decorator
+    @JSONController('/test-middleware-storage')
+    class MiddlewareStorageController {
+      // Apply middleware using the decorator
+      @UseMiddleware(firstMiddleware)
+      @Get('/endpoint')
+      getEndpoint() {
+        return { success: true };
+      }
+    }
+    
+    // Create express app
+    const app = express();
+    
+    // Clear existing middleware for this controller in metadata storage
+    const metadataStorage = MetadataStorage.getInstance();
+    
+    // Manually add a second middleware through the metadata storage
+    // This tests lines 179-181 specifically, as this middleware is added via the storage
+    // and not directly through the decorator
+    metadataStorage.addMiddlewareMetadata({
+      target: MiddlewareStorageController,
+      method: 'getEndpoint',
+      middleware: secondMiddleware
+    });
+    
+    // Create router
+    const registry = ExpressRouteRegistry.getInstance();
+    const router = registry.createRouter({
+      controllers: [MiddlewareStorageController],
+    });
+    
+    // Add router to express app
+    app.use(router);
+    
+    // Test endpoint - this should execute both middleware functions
+    const response = await request(app).get('/test-middleware-storage/endpoint');
+    
+    // Verify response
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ success: true });
+    
+    // Verify both middleware were called - especially the second one added via metadata storage,
+    // which tests the functionality in lines 179-181
+    expect(firstMiddleware).toHaveBeenCalled();
+    expect(secondMiddleware).toHaveBeenCalled();
+    
+    // Verify order - the manually added middleware should be called after the decorator middleware
+    expect(firstMiddleware.mock.invocationCallOrder[0])
+      .toBeLessThan(secondMiddleware.mock.invocationCallOrder[0]);
   });
 }); 

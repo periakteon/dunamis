@@ -116,7 +116,7 @@
 
 - [ ] Step 11: Implement Zod Integration for Request Validation
 
-  - **Task**: Create system for validating request data using Zod schemas
+  - **Task**: Create system for validating request data using Zod schemas. When validated, the request data should be transformed and added to the request body and can be accessed by the controller method (in a type-safe way).
   - **Files**:
     - `src/validation/zod.ts`: Zod integration utilities
     - `src/decorators/validation.ts`: Validation decorators
