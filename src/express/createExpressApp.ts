@@ -8,6 +8,7 @@
 import express, { Express, RequestHandler, json, urlencoded } from "express";
 import { ClassConstructor, MiddlewareFunction } from "../types";
 import { ExpressRouteRegistry } from "./ExpressRouteRegistry";
+import { useErrorHandler } from "../error/errorHandler";
 
 /**
  * Options for creating an Express application
@@ -67,6 +68,14 @@ export interface CreateExpressAppOptions {
    * @default false
    */
   logger?: boolean | string | Record<string, any>;
+
+  /**
+   * Error handling middleware
+   * - If true, enables the default error handler
+   * - If false or undefined, no error handler is applied
+   * @default false
+   */
+  errorHandler?: boolean;
 }
 
 /**
@@ -123,7 +132,10 @@ export interface CreateExpressAppOptions {
  *   },
  *   
  *   // Configure logger with format
- *   logger: 'combined'
+ *   logger: 'combined',
+ *   
+ *   // Enable error handler for validation errors
+ *   errorHandler: true
  * });
  * 
  * app.listen(3000);
@@ -208,6 +220,11 @@ export function createExpressApp(options: CreateExpressAppOptions): Express {
 
   // Mount router on the application
   app.use(router);
+
+  // Add error handler if enabled
+  if (options.errorHandler) {
+    useErrorHandler(app);
+  }
 
   return app;
 } 

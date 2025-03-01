@@ -31,8 +31,15 @@ export * from "./decorators";
 // Export Express integration
 export * from "./express";
 
+// Export validation
+export * from "./validation";
+
+// Export error handling
+export * from "./error";
+
 // This file will export all public API components as they are implemented
 // Future exports:
 // - Method decorators (@Get, @Post, etc.) - Coming in Step 5
 // - Parameter decorators (@Param, @Body, etc.) - Coming in Steps 6-7
 // - Express integration (createExpressApp) - Coming in Steps 8-9
+// - Error handling - Coming in Step 12

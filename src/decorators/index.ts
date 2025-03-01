@@ -15,3 +15,6 @@ export * from "./param";
 
 // Middleware decorators
 export * from "./middleware";
+
+// Validation decorators
+export * from "./validation";

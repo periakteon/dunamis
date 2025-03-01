@@ -114,15 +114,21 @@
 
 ## Request Validation & Transformation
 
-- [ ] Step 11: Implement Zod Integration for Request Validation
+- [x] Step 11: Implement Zod Integration for Request Validation
 
   - **Task**: Create system for validating request data using Zod schemas. When validated, the request data should be transformed and added to the request body and can be accessed by the controller method (in a type-safe way).
   - **Files**:
     - `src/validation/zod.ts`: Zod integration utilities
+    - `src/validation/index.ts`: Exports for validation module
     - `src/decorators/validation.ts`: Validation decorators
-    - `tests/validation/zod.test.ts`: Tests for Zod validation
+    - `src/error/HttpError.ts`: Error handling class
+    - `src/error/errorHandler.ts`: Error middleware
+    - `src/error/index.ts`: Error handling exports
+    - `src/utils/getMetadataStorage.ts`: Utility for accessing metadata storage
+    - `tests/validation/zod.test.ts`: Unit tests for Zod validation
+    - `tests/integration/validation.test.ts`: Integration tests with Express
   - **Step Dependencies**: Step 10
-  - **User Instructions**: None
+  - **User Instructions**: Run `npm install zod` to install the required dependency
 
 ## Error Handling
 
