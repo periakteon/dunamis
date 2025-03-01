@@ -181,14 +181,7 @@ export function createExpressApp(options: CreateExpressAppOptions): Express {
   if (options.logger) {
     try {
       const morgan = require('morgan');
-      let morganConfig: string | Record<string, any> = 'dev'; // Default format
-      
-      if (typeof options.logger === 'string') {
-        morganConfig = options.logger;
-      } else if (typeof options.logger === 'object') {
-        morganConfig = options.logger;
-      }
-      
+      const morganConfig = typeof options.logger === 'boolean' ? 'dev' : options.logger;
       middleware.push(morgan(morganConfig));
     } catch (error) {
       console.warn('Logger middleware enabled but "morgan" package is not installed. Run "npm install morgan" to use this feature.');

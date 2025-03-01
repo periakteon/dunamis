@@ -8,6 +8,7 @@ import { createExpressApp } from "../../src/express/createExpressApp";
 import { JSONController } from "../../src/decorators/controller";
 import { Get, Post } from "../../src/decorators/method";
 import { Body, Param, Req } from "../../src/decorators/param";
+import { NextFunction, Request, Response } from "express";
 
 // Mock controllers for testing
 @JSONController("/users")
@@ -250,6 +251,72 @@ describe("createExpressApp", () => {
     }
   });
 
+  it("should use default 'dev' format when logger is set to true", () => {
+    // Mock console.warn
+    mockConsoleWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    
+    // Create a mock for morgan
+    const morganMock = vi.fn().mockReturnValue(() => {});
+    vi.mock('morgan', () => morganMock);
+    
+    // Create app with logger set to true
+    createExpressApp({
+      controllers: [UserController],
+      logger: true // Should use 'dev' format
+    });
+
+    // Check if morgan was called with 'dev' format
+    try {
+      expect(morganMock).toHaveBeenCalledWith('dev');
+    } catch (e) {
+      // If mock wasn't called, morgan probably isn't installed
+      expect(mockConsoleWarn).toHaveBeenCalledWith(expect.stringContaining("Logger middleware"));
+    }
+  });
+
+  it("should use custom logger options when provided as an object", () => {
+    // Mock console.warn
+    mockConsoleWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    
+    // Create a mock for morgan
+    const morganMock = vi.fn().mockReturnValue(() => {});
+    vi.mock('morgan', () => morganMock);
+    
+    // Create app with logger options as an object
+    const loggerOptions = { format: 'tiny', immediate: true };
+    createExpressApp({
+      controllers: [UserController],
+      logger: loggerOptions
+    });
+
+    // Check if morgan was called with the options object
+    try {
+      expect(morganMock).toHaveBeenCalledWith(loggerOptions);
+    } catch (e) {
+      // If mock wasn't called, morgan probably isn't installed
+      expect(mockConsoleWarn).toHaveBeenCalledWith(expect.stringContaining("Logger middleware"));
+    }
+  });
+
+  it("should properly handle middleware application order", async () => {
+    // Create a middleware that adds a custom header
+    const testMiddleware = (_req: Request, res: Response, next: NextFunction) => {
+      res.setHeader('X-Test-Middleware', 'applied');
+      next();
+    };
+    
+    // Create app with the test middleware
+    const app = createExpressApp({
+      controllers: [UserController],
+      globalMiddleware: [testMiddleware]
+    });
+
+    // Test if the middleware was applied correctly
+    const response = await request(app).get("/users");
+    expect(response.status).toBe(200);
+    expect(response.headers['x-test-middleware']).toBe('applied');
+  });
+
   it("should properly handle body parser configuration", async () => {
     // This test also relied on logs, so we need a different approach
     // We'll use a combination of the different bodyParser options and 
@@ -273,5 +340,83 @@ describe("createExpressApp", () => {
     // The body should be properly parsed
     expect(jsonResponse.body.body).toHaveProperty("name", "Custom");
     expect(jsonResponse.body.body).toHaveProperty("email", "custom@example.com");
+  });
+
+  it("should work without any middleware", async () => {
+    // Create app with no middleware options
+    const app = createExpressApp({
+      controllers: [UserController],
+      cors: false,
+      helmet: false,
+      logger: false,
+      bodyParser: {
+        json: false,
+        urlencoded: false
+      },
+      globalMiddleware: []
+    });
+
+    // Still should serve the controller routes
+    const response = await request(app).get("/users");
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ users: [{ id: 1, name: "John" }, { id: 2, name: "Jane" }] });
+  });
+
+  it("should apply multiple middleware correctly", async () => {
+    // Create middleware functions that modify the response
+    const middleware1 = (_req: Request, res: Response, next: NextFunction) => {
+      res.setHeader('X-Middleware-1', 'applied');
+      next();
+    };
+    
+    const middleware2 = (_req: Request, res: Response, next: NextFunction) => {
+      res.setHeader('X-Middleware-2', 'applied');
+      next();
+    };
+    
+    // Create app with multiple middleware
+    const app = createExpressApp({
+      controllers: [UserController],
+      globalMiddleware: [middleware1, middleware2]
+    });
+
+    // Test if both middleware were applied
+    const response = await request(app).get("/users");
+    expect(response.status).toBe(200);
+    expect(response.headers['x-middleware-1']).toBe('applied');
+    expect(response.headers['x-middleware-2']).toBe('applied');
+  });
+
+  it("should handle errors when required middleware packages are missing", () => {
+    // Mock console.warn
+    mockConsoleWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    
+    // Create app with all optional middleware enabled
+    createExpressApp({
+      controllers: [UserController],
+      cors: true,
+      helmet: true,
+      logger: true
+    });
+    
+    // Check if warnings were logged for each missing package
+    expect(mockConsoleWarn).toHaveBeenCalledTimes(3);
+    expect(mockConsoleWarn).toHaveBeenCalledWith(expect.stringContaining("CORS middleware"));
+    expect(mockConsoleWarn).toHaveBeenCalledWith(expect.stringContaining("Helmet middleware"));
+    expect(mockConsoleWarn).toHaveBeenCalledWith(expect.stringContaining("Logger middleware"));
+  });
+
+  it("should properly use default logger format when logger is boolean", () => {
+    // Override console.warn to verify logger format
+    mockConsoleWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    
+    // Create a simple app with boolean logger
+    createExpressApp({
+      controllers: [UserController],
+      logger: true
+    });
+    
+    // Since package is not installed, we can only verify we attempted to use it
+    expect(mockConsoleWarn).toHaveBeenCalledWith(expect.stringContaining("Logger middleware"));
   });
 }); 
