@@ -18,3 +18,6 @@ export * from "./middleware";
 
 // Validation decorators
 export * from "./validation";
+
+// Error handling decorators
+export * from "./error";

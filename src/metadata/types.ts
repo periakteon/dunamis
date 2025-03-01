@@ -1,5 +1,6 @@
 import { ClassConstructor, HttpMethod, MiddlewareFunction } from "../types";
 import { ParameterType } from "../constants";
+import { ErrorHandlerFunction } from "../error/errorHandler";
 
 /**
  * Base interface for all metadata objects
@@ -111,4 +112,19 @@ export interface MiddlewareMetadata extends BaseMetadata {
    * Middleware function
    */
   middleware: MiddlewareFunction;
+}
+
+/**
+ * Error handler metadata interface
+ */
+export interface ErrorHandlerMetadata extends BaseMetadata {
+  /**
+   * Controller class that the error handler belongs to
+   */
+  target: ClassConstructor;
+
+  /**
+   * Error handler function
+   */
+  handler: ErrorHandlerFunction;
 }

@@ -132,8 +132,17 @@
 
 ## Error Handling
 
-- [ ] Step 12: Implement Error Handling System
+- [x] Step 12: Implement Error Handling Decorator for Controller Classes
 
+  - It should be possible to use the error handling decorator on a controller class to handle errors in a centralized way.
+  - It should be minimalistic and not require a lot of code to implement.
+  - It should return the error in a JSON response with the following format:
+    ```json
+    {
+      "message": "Error message",
+      "status": <HTTP status code>
+    }
+    ```
   - **Task**: Create system for handling errors in a centralized way
   - **Files**:
     - `src/error/ErrorHandler.ts`: Error handling utilities
@@ -144,4 +153,18 @@
 
 ## README
 
-- [ ] Step 13: Update README.md in a way that is easy to understand for users who want to use the framework. Mention that the framework is still under development and that the documentation will be improved in the future. Provide a basic example of how to use the framework and detailed documentation on how to use the different decorators.
+- [x] Step 13: Update README.md in a way that is easy to understand for users who want to use the framework.
+
+  - Mention that the framework is still under development and that the documentation will be improved in the future.
+  - Provide a basic example of how to use the framework and detailed documentation
+    on how to use the different decorators.
+  - This should be done in a way that is easy to understand for users who are not familiar with TypeScript and Express.
+  - It should include every detail that is needed to use the framework.
+  - It should be well-written and easy to understand.
+  - It should be well-structured and easy to navigate.
+  - It should include all features that are implemented in the framework.
+  - It should include a basic example of how to use the framework.
+  - It should include a detailed documentation on how to use the different decorators.
+  - It should include a detailed documentation on how to use the different middleware.
+  - It should include a detailed documentation on how to use the different validation.
+  - It should include a detailed documentation on how to use the different error handling.

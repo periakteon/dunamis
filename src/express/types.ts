@@ -2,10 +2,28 @@ import type { Router, Request as ExpressRequest, Response, RequestHandler } from
 import type { ClassConstructor, MiddlewareFunction } from "../types";
 
 /**
- * Extended Request type with session support (for express-session)
+ * Extended Request type with additional properties
  */
 export interface Request extends ExpressRequest {
+  /**
+   * Session data (for express-session)
+   */
   session?: Record<string, any>;
+  
+  /**
+   * Controller instance that handled the request
+   * Used for error handling
+   */
+  controller?: object;
+  
+  /**
+   * Validated data from request validation middleware
+   */
+  validatedData?: {
+    body?: any;
+    query?: any;
+    params?: any;
+  };
 }
 
 /**

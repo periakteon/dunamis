@@ -20,6 +20,7 @@ import {
 } from "./types";
 import express from "express";
 import { convertMiddlewareToHandlers } from "./middleware";
+import { createControllerErrorHandlingMiddleware } from "../error/errorHandler";
 
 /**
  * Express route registry for registering controllers and routes
@@ -102,8 +103,18 @@ export class ExpressRouteRegistry {
     }
 
     // Register controller routes
-    if (instance) {
-      this.registerControllerRoutes(router, controllerMetadata, instance, globalPrefix);
+    this.registerControllerRoutes(router, controllerMetadata, instance as object, globalPrefix);
+
+    // Register error handler if one exists
+    const errorHandlerMetadata = this.metadataStorage.getErrorHandlerMetadata(controller);
+    if (errorHandlerMetadata) {
+      const errorHandlerMiddleware = createControllerErrorHandlingMiddleware(
+        controller,
+        errorHandlerMetadata.handler
+      );
+      
+      // Add the controller-specific error handler
+      router.use(errorHandlerMiddleware);
     }
   }
 
@@ -334,6 +345,9 @@ export class ExpressRouteRegistry {
 
     return (req: Request, res: Response, next: NextFunction): void => {
       try {
+        // Store controller instance on the request for error handling
+        req.controller = instance;
+
         // Extract method parameters
         const args = paramFactories.map(factory => {
           if (!factory) return undefined;

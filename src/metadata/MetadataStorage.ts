@@ -1,5 +1,5 @@
 import { ClassConstructor } from "../types";
-import { ControllerMetadata, MethodMetadata, ParameterMetadata, MiddlewareMetadata } from "./types";
+import { ControllerMetadata, MethodMetadata, ParameterMetadata, MiddlewareMetadata, ErrorHandlerMetadata } from "./types";
 import { METADATA_KEY } from "../constants";
 import { hasMetadata } from "../utils/metadata";
 
@@ -14,6 +14,7 @@ export class MetadataStorage {
   private methods: Map<string, MethodMetadata[]> = new Map();
   private parameters: Map<string, ParameterMetadata[]> = new Map();
   private middleware: Map<string, MiddlewareMetadata[]> = new Map();
+  private errorHandlers: Map<ClassConstructor, ErrorHandlerMetadata> = new Map();
 
   /**
    * Private constructor to enforce singleton pattern
@@ -76,6 +77,15 @@ export class MetadataStorage {
     const existingMetadata = this.middleware.get(key) || [];
     existingMetadata.push(metadata);
     this.middleware.set(key, existingMetadata);
+  }
+
+  /**
+   * Add error handler metadata
+   *
+   * @param metadata - Error handler metadata
+   */
+  public addErrorHandlerMetadata(metadata: ErrorHandlerMetadata): void {
+    this.errorHandlers.set(metadata.target, metadata);
   }
 
   /**
@@ -165,6 +175,26 @@ export class MetadataStorage {
   }
 
   /**
+   * Get error handler metadata for a controller
+   *
+   * @param target - Controller class
+   * @returns Error handler metadata or undefined if not found
+   */
+  public getErrorHandlerMetadata(target: ClassConstructor): ErrorHandlerMetadata | undefined {
+    return this.errorHandlers.get(target);
+  }
+
+  /**
+   * Check if a controller has an error handler
+   *
+   * @param target - Controller class
+   * @returns True if the controller has an error handler
+   */
+  public hasErrorHandler(target: ClassConstructor): boolean {
+    return this.errorHandlers.has(target);
+  }
+
+  /**
    * Clear all metadata (mainly for testing purposes)
    */
   public clear(): void {
@@ -172,6 +202,7 @@ export class MetadataStorage {
     this.methods.clear();
     this.parameters.clear();
     this.middleware.clear();
+    this.errorHandlers.clear();
   }
 
   /**
