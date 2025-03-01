@@ -16,6 +16,11 @@ export class MetadataStorage {
   private middleware: Map<string, MiddlewareMetadata[]> = new Map();
 
   /**
+   * Private constructor to enforce singleton pattern
+   */
+  private constructor() {}
+
+  /**
    * Get the singleton instance of MetadataStorage
    */
   public static getInstance(): MetadataStorage {
@@ -24,11 +29,6 @@ export class MetadataStorage {
     }
     return MetadataStorage.instance;
   }
-
-  /**
-   * Private constructor to enforce singleton pattern
-   */
-  private constructor() {}
 
   /**
    * Add controller metadata
