@@ -54,10 +54,12 @@ export interface CreateExpressAppOptions {
    * - If false, body parsing is disabled
    * @default true
    */
-  bodyParser?: boolean | {
-    json?: boolean | Parameters<typeof json>[0];
-    urlencoded?: boolean | Parameters<typeof urlencoded>[0];
-  };
+  bodyParser?:
+    | boolean
+    | {
+        json?: boolean | Parameters<typeof json>[0];
+        urlencoded?: boolean | Parameters<typeof urlencoded>[0];
+      };
 
   /**
    * Request logging middleware configuration
@@ -101,43 +103,43 @@ export interface CreateExpressAppOptions {
  *   console.log('Server is running on port 3000');
  * });
  * ```
- * 
+ *
  * @example
  * ```typescript
  * // Advanced usage with custom middleware configurations
  * import { createExpressApp } from '@periakteon/dunamisjs';
  * import { UserController, ProductController } from './controllers';
- * 
+ *
  * const app = createExpressApp({
  *   controllers: [UserController, ProductController],
  *   routePrefix: '/api/v1',
- *   
+ *
  *   // Configure CORS with options
  *   cors: {
  *     origin: ['https://example.com', 'https://dev.example.com'],
  *     methods: ['GET', 'POST', 'PUT', 'DELETE'],
  *     credentials: true
  *   },
- *   
+ *
  *   // Configure Helmet with custom settings
  *   helmet: {
  *     contentSecurityPolicy: false,
  *     xssFilter: true
  *   },
- *   
+ *
  *   // Configure body parser with limits
  *   bodyParser: {
  *     json: { limit: '10mb', strict: true },
  *     urlencoded: { extended: true, limit: '10mb' }
  *   },
- *   
+ *
  *   // Configure logger with format
  *   logger: 'combined',
- *   
+ *
  *   // Enable error handler for validation errors
  *   errorHandler: true
  * });
- * 
+ *
  * app.listen(3000);
  * ```
  */
@@ -148,21 +150,23 @@ export function createExpressApp(options: CreateExpressAppOptions): Express {
 
   // Configure body parser middleware
   if (options.bodyParser !== false) {
-    const bodyParserOptions = options.bodyParser === true || options.bodyParser === undefined
-      ? {} // Use default options
-      : options.bodyParser;
+    const bodyParserOptions =
+      options.bodyParser === true || options.bodyParser === undefined
+        ? {} // Use default options
+        : options.bodyParser;
 
     // Configure JSON parser
     if (bodyParserOptions.json !== false) {
-      const jsonOptions = typeof bodyParserOptions.json === 'object' ? bodyParserOptions.json : {};
+      const jsonOptions = typeof bodyParserOptions.json === "object" ? bodyParserOptions.json : {};
       app.use(express.json(jsonOptions));
     }
 
     // Configure URL-encoded parser
     if (bodyParserOptions.urlencoded !== false) {
-      const urlencodedOptions = typeof bodyParserOptions.urlencoded === 'object' 
-        ? bodyParserOptions.urlencoded 
-        : { extended: true };
+      const urlencodedOptions =
+        typeof bodyParserOptions.urlencoded === "object"
+          ? bodyParserOptions.urlencoded
+          : { extended: true };
       app.use(express.urlencoded(urlencodedOptions));
     }
   }
@@ -170,33 +174,39 @@ export function createExpressApp(options: CreateExpressAppOptions): Express {
   // Add CORS if enabled
   if (options.cors) {
     try {
-      const cors = require('cors');
+      const cors = require("cors");
       const corsOptions = options.cors === true ? {} : options.cors;
       middleware.push(cors(corsOptions));
     } catch (error) {
-      console.warn('CORS middleware enabled but "cors" package is not installed. Run "npm install cors" to use this feature.');
+      console.warn(
+        'CORS middleware enabled but "cors" package is not installed. Run "npm install cors" to use this feature.'
+      );
     }
   }
 
   // Add Helmet if enabled
   if (options.helmet) {
     try {
-      const helmet = require('helmet');
+      const helmet = require("helmet");
       const helmetOptions = options.helmet === true ? {} : options.helmet;
       middleware.push(helmet(helmetOptions));
     } catch (error) {
-      console.warn('Helmet middleware enabled but "helmet" package is not installed. Run "npm install helmet" to use this feature.');
+      console.warn(
+        'Helmet middleware enabled but "helmet" package is not installed. Run "npm install helmet" to use this feature.'
+      );
     }
   }
 
   // Add logger if enabled
   if (options.logger) {
     try {
-      const morgan = require('morgan');
-      const morganConfig = typeof options.logger === 'boolean' ? 'dev' : options.logger;
+      const morgan = require("morgan");
+      const morganConfig = typeof options.logger === "boolean" ? "dev" : options.logger;
       middleware.push(morgan(morganConfig));
     } catch (error) {
-      console.warn('Logger middleware enabled but "morgan" package is not installed. Run "npm install morgan" to use this feature.');
+      console.warn(
+        'Logger middleware enabled but "morgan" package is not installed. Run "npm install morgan" to use this feature.'
+      );
     }
   }
 
@@ -227,4 +237,4 @@ export function createExpressApp(options: CreateExpressAppOptions): Express {
   }
 
   return app;
-} 
+}

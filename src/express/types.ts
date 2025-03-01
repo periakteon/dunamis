@@ -9,13 +9,13 @@ export interface Request extends ExpressRequest {
    * Session data (for express-session)
    */
   session?: Record<string, any>;
-  
+
   /**
    * Controller instance that handled the request
    * Used for error handling
    */
   controller?: object;
-  
+
   /**
    * Validated data from request validation middleware
    */

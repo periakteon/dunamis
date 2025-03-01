@@ -3,4 +3,4 @@
  * Provides utilities for validating request data using Zod schemas
  */
 
-export * from './zod'; 
+export * from "./zod";

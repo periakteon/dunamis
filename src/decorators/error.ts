@@ -8,10 +8,10 @@ import { ErrorHandlerFunction, defaultControllerErrorHandler } from "../error/er
 /**
  * Decorator to apply an error handler to a controller class.
  * The error handler will be used to handle errors thrown by controller methods.
- * 
+ *
  * @param handlerOrTarget - Error handler function or controller class
  * @returns Decorator function or void
- * 
+ *
  * @example
  * // With custom error handler
  * @ErrorHandler((err, req, res) => {
@@ -21,7 +21,7 @@ import { ErrorHandlerFunction, defaultControllerErrorHandler } from "../error/er
  * class UserController {
  *   // ...
  * }
- * 
+ *
  * @example
  * // With default error handler
  * @ErrorHandler()
@@ -30,9 +30,11 @@ import { ErrorHandlerFunction, defaultControllerErrorHandler } from "../error/er
  *   // ...
  * }
  */
-export function ErrorHandler(handlerOrTarget?: ErrorHandlerFunction | ClassConstructor): ClassDecorator | void {
+export function ErrorHandler(
+  handlerOrTarget?: ErrorHandlerFunction | ClassConstructor
+): ClassDecorator | void {
   // If handlerOrTarget is a class constructor, it means the decorator was called without parameters
-  if (typeof handlerOrTarget === 'function' && isClassConstructor(handlerOrTarget as Function)) {
+  if (typeof handlerOrTarget === "function" && isClassConstructor(handlerOrTarget as Function)) {
     return applyErrorHandler(handlerOrTarget as ClassConstructor);
   }
 
@@ -54,31 +56,36 @@ export function createErrorHandlerDecorator(handler?: ErrorHandlerFunction): Cla
 
 /**
  * Apply an error handler to a controller class
- * 
+ *
  * @param target - Controller class
  * @param handler - Error handler function
  */
-function applyErrorHandler(target: ClassConstructor, handler: ErrorHandlerFunction = defaultControllerErrorHandler): void {
+function applyErrorHandler(
+  target: ClassConstructor,
+  handler: ErrorHandlerFunction = defaultControllerErrorHandler
+): void {
   const metadataStorage = MetadataStorage.getInstance();
-  
+
   // Check if target is a controller
   if (!metadataStorage.isController(target)) {
-    throw new Error(`@ErrorHandler can only be applied to controller classes. ${target.name} is not a controller.`);
+    throw new Error(
+      `@ErrorHandler can only be applied to controller classes. ${target.name} is not a controller.`
+    );
   }
-  
+
   // Store error handler metadata
   metadataStorage.addErrorHandlerMetadata({
     target,
-    handler
+    handler,
   });
 }
 
 /**
  * Check if a function is a class constructor
- * 
+ *
  * @param func - Function to check
  * @returns True if the function is a class constructor
  */
 function isClassConstructor(func: Function): boolean {
-  return func.toString().substring(0, 5) === 'class';
-} 
+  return func.toString().substring(0, 5) === "class";
+}

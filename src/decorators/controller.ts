@@ -71,7 +71,7 @@ export function JSONController(prefixOrOptions: string | JSONControllerOptions =
     };
 
     MetadataStorage.getInstance().addControllerMetadata(metadata);
-    
+
     // Register middleware metadata for each middleware function
     const metadataStorage = MetadataStorage.getInstance();
     for (const middlewareFn of middleware) {
@@ -79,7 +79,7 @@ export function JSONController(prefixOrOptions: string | JSONControllerOptions =
         target: target as ClassConstructor,
         middleware: middlewareFn,
       };
-      
+
       metadataStorage.addMiddlewareMetadata(middlewareMetadata);
     }
   };

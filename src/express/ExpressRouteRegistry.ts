@@ -58,7 +58,7 @@ export class ExpressRouteRegistry {
 
     // Ensure JSON body parsing middleware is applied
     router.use(express.json());
-    
+
     // Apply global middleware if provided
     if (options.middleware && options.middleware.length > 0) {
       router.use(...(options.middleware as RequestHandler[]));
@@ -112,7 +112,7 @@ export class ExpressRouteRegistry {
         controller,
         errorHandlerMetadata.handler
       );
-      
+
       // Add the controller-specific error handler
       router.use(errorHandlerMiddleware);
     }
@@ -144,13 +144,15 @@ export class ExpressRouteRegistry {
 
     // Apply controller-level middleware if any
     const controllerMiddleware = controllerMetadata.middleware || [];
-    
+
     // Get additional middleware from metadata storage
-    const additionalMiddleware = this.metadataStorage.getControllerMiddleware(controllerMetadata.target);
+    const additionalMiddleware = this.metadataStorage.getControllerMiddleware(
+      controllerMetadata.target
+    );
     for (const middleware of additionalMiddleware) {
       controllerMiddleware.push(middleware.middleware);
     }
-    
+
     // Convert middleware functions to Express request handlers
     const controllerMiddlewareHandlers = convertMiddlewareToHandlers(controllerMiddleware);
 
@@ -181,7 +183,7 @@ export class ExpressRouteRegistry {
 
     // Get method-level middleware
     const methodMiddleware = methodMetadata.middleware || [];
-    
+
     // Get additional middleware from metadata storage
     const additionalMiddleware = this.metadataStorage.getMethodMiddleware(
       methodMetadata.target,
@@ -190,7 +192,7 @@ export class ExpressRouteRegistry {
     for (const middleware of additionalMiddleware) {
       methodMiddleware.push(middleware.middleware);
     }
-    
+
     // Convert method middleware to Express request handlers
     const methodMiddlewareHandlers = convertMiddlewareToHandlers(methodMiddleware);
 
@@ -242,7 +244,7 @@ export class ExpressRouteRegistry {
    */
   private createParameterFactories(parameters: ParameterMetadata[]): (ParamFactory | undefined)[] {
     const factories: (ParamFactory | undefined)[] = [];
-    
+
     // Fill array with undefined values to ensure correct length
     const maxIndex = parameters.length > 0 ? Math.max(...parameters.map(p => p.index)) : -1;
 
@@ -279,11 +281,11 @@ export class ExpressRouteRegistry {
           // First check if validated data exists
           if (req.validatedData?.body !== undefined) {
             // Return the entire validated body or a specific property
-            return !name || name === '0' ? req.validatedData.body : req.validatedData.body[name];
+            return !name || name === "0" ? req.validatedData.body : req.validatedData.body[name];
           }
-          
+
           // Fall back to raw body if no validation was performed
-          return !name || name === '0' ? req.body : req.body?.[name];
+          return !name || name === "0" ? req.body : req.body?.[name];
         };
 
       case ParameterType.QUERY:
@@ -291,11 +293,11 @@ export class ExpressRouteRegistry {
           // Check if validatedData exists and contains query data
           if (req.validatedData?.query !== undefined) {
             // Return the entire validated query or a specific property
-            return !name || name === '0' ? req.validatedData.query : req.validatedData.query[name];
+            return !name || name === "0" ? req.validatedData.query : req.validatedData.query[name];
           }
-          
+
           // Fall back to raw query if no validation was performed
-          return !name || name === '0' ? req.query : req.query[name];
+          return !name || name === "0" ? req.query : req.query[name];
         };
 
       case ParameterType.PARAM:
@@ -305,7 +307,7 @@ export class ExpressRouteRegistry {
             // Return the entire validated params or a specific property
             return name ? req.validatedData.params[name] : req.validatedData.params;
           }
-          
+
           // Fall back to raw params if no validation was performed
           return name ? req.params[name] : req.params;
         };

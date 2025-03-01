@@ -40,7 +40,11 @@ export function UseMiddleware(middleware: MiddlewareFunction | MiddlewareFunctio
   return function (target: any, propertyKey?: string | symbol): void {
     if (propertyKey) {
       // Method decorator
-      applyMethodMiddleware(target.constructor as ClassConstructor, propertyKey.toString(), middlewareArray);
+      applyMethodMiddleware(
+        target.constructor as ClassConstructor,
+        propertyKey.toString(),
+        middlewareArray
+      );
     } else {
       // Class decorator
       applyControllerMiddleware(target as ClassConstructor, middlewareArray);
@@ -54,12 +58,13 @@ export function UseMiddleware(middleware: MiddlewareFunction | MiddlewareFunctio
  * @param target - The controller class
  * @param middleware - Array of middleware functions
  */
-function applyControllerMiddleware(target: ClassConstructor, middleware: MiddlewareFunction[]): void {
+function applyControllerMiddleware(
+  target: ClassConstructor,
+  middleware: MiddlewareFunction[]
+): void {
   // Get existing middleware or initialize empty array
-  const existingMiddleware = getMetadata<MiddlewareFunction[]>(
-    METADATA_KEY.CONTROLLER_MIDDLEWARE,
-    target
-  ) || [];
+  const existingMiddleware =
+    getMetadata<MiddlewareFunction[]>(METADATA_KEY.CONTROLLER_MIDDLEWARE, target) || [];
 
   // Combine with new middleware
   const newMiddleware = [...existingMiddleware, ...middleware];
@@ -69,13 +74,13 @@ function applyControllerMiddleware(target: ClassConstructor, middleware: Middlew
 
   // Register each middleware in the metadata storage
   const metadataStorage = MetadataStorage.getInstance();
-  
+
   for (const middlewareFn of middleware) {
     const metadata: MiddlewareMetadata = {
       target,
       middleware: middlewareFn,
     };
-    
+
     metadataStorage.addMiddlewareMetadata(metadata);
   }
 }
@@ -106,14 +111,14 @@ function applyMethodMiddleware(
 
   // Register each middleware in the metadata storage
   const metadataStorage = MetadataStorage.getInstance();
-  
+
   for (const middlewareFn of middleware) {
     const metadata: MiddlewareMetadata = {
       target,
       method: methodName,
       middleware: middlewareFn,
     };
-    
+
     metadataStorage.addMiddlewareMetadata(metadata);
   }
-} 
+}

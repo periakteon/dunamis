@@ -1,23 +1,22 @@
-import { Response, NextFunction, Application } from 'express';
-import { Request } from '../express/types';
-import { HttpError } from './HttpError';
-import { ClassConstructor } from '../types';
+import { Response, NextFunction, Application } from "express";
+import { Request } from "../express/types";
+import { HttpError } from "./HttpError";
+import { ClassConstructor } from "../types";
 
 /**
  * Generic error response interface
  */
 export interface ErrorResponse {
-    
-    /**
-     * Optional additional error details
-     */
-    [key: string]: any;
-    
+  /**
+   * Optional additional error details
+   */
+  [key: string]: any;
+
   /**
    * Error message
    */
   message: string;
-  
+
   /**
    * HTTP status code
    */
@@ -26,7 +25,7 @@ export interface ErrorResponse {
 
 /**
  * Type for error handler function
- * 
+ *
  * @param error The error that was thrown
  * @param req The Express request object
  * @param res The Express response object
@@ -41,7 +40,7 @@ export type ErrorHandlerFunction = (
 
 /**
  * Express error handler middleware
- * 
+ *
  * @param err Error object
  * @param _req Express request
  * @param res Express response
@@ -55,7 +54,7 @@ export function errorHandler(
   _next: NextFunction
 ): void {
   const response: ErrorResponse = {
-    message: err.message || 'Internal Server Error',
+    message: err.message || "Internal Server Error",
     status: err instanceof HttpError ? err.status : 500,
   };
 
@@ -70,15 +69,15 @@ export function errorHandler(
 
 /**
  * Applies the error handler middleware to an Express app
- * 
+ *
  * @param app Express application
  */
 export function useErrorHandler(app: Application): void {
   // Not found handler - should be added before the error handler
   app.use((_req: Request, res: Response) => {
     res.status(404).json({
-      message: 'Not Found',
-      status: 404
+      message: "Not Found",
+      status: 404,
     });
   });
 
@@ -88,7 +87,7 @@ export function useErrorHandler(app: Application): void {
 
 /**
  * Default error handler implementation for controller-level error handling
- * 
+ *
  * @param error The error that was thrown
  * @param _req The Express request object
  * @param res The Express response object
@@ -100,7 +99,7 @@ export function defaultControllerErrorHandler(
   _next: NextFunction
 ): void {
   const response = {
-    message: error.message || 'Internal Server Error',
+    message: error.message || "Internal Server Error",
     status: error instanceof HttpError ? error.status : 500,
   };
 
@@ -115,7 +114,7 @@ export function defaultControllerErrorHandler(
 
 /**
  * Creates an error handling middleware for a controller
- * 
+ *
  * @param controller The controller class
  * @param errorHandler The error handler function
  * @returns An Express middleware function
@@ -129,7 +128,7 @@ export function createControllerErrorHandlingMiddleware(
     if (!(req.controller instanceof controller)) {
       return next(err);
     }
-    
+
     try {
       // Call the error handler
       errorHandler(err, req, res, next);
@@ -138,4 +137,4 @@ export function createControllerErrorHandlingMiddleware(
       next(handlerError);
     }
   };
-} 
+}

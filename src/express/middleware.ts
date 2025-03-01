@@ -51,10 +51,10 @@ export function convertMiddlewareToHandlers(middleware: MiddlewareFunction[]): R
  */
 export function combineMiddleware(...middlewareArrays: MiddlewareFunction[][]): RequestHandler[] {
   const combinedMiddleware: MiddlewareFunction[] = [];
-  
+
   for (const middleware of middlewareArrays) {
     combinedMiddleware.push(...middleware);
   }
-  
+
   return convertMiddlewareToHandlers(combinedMiddleware);
-} 
+}

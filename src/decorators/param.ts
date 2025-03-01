@@ -123,7 +123,7 @@ export function Param(name: string, options?: ParameterOptions) {
  *   const { page, limit } = query;
  *   return this.userService.findAll(page, limit);
  * }
- * 
+ *
  * // Get specific query parameters
  * @Get('/users')
  * getUsers(@Query('page') page: number, @Query('limit') limit: number) {

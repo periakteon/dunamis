@@ -1,5 +1,11 @@
 import { ClassConstructor } from "../types";
-import { ControllerMetadata, MethodMetadata, ParameterMetadata, MiddlewareMetadata, ErrorHandlerMetadata } from "./types";
+import {
+  ControllerMetadata,
+  MethodMetadata,
+  ParameterMetadata,
+  MiddlewareMetadata,
+  ErrorHandlerMetadata,
+} from "./types";
 import { METADATA_KEY } from "../constants";
 import { hasMetadata } from "../utils/metadata";
 
