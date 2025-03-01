@@ -12,6 +12,19 @@ import { JSONController } from "../../src/decorators/controller";
 import { ClassConstructor } from "../../src/types";
 import { Request, Response, NextFunction } from "express";
 
+// Mock ClassMethodDecoratorContext interface to match TypeScript 5.0+ expectations
+interface MockClassMethodDecoratorContext {
+  kind: string;
+  name: string | symbol;
+  static: boolean;
+  private: boolean;
+  access: {
+    has: (obj: object) => boolean;
+    get: (obj: object) => unknown;
+  };
+  addInitializer: (initializer: () => void) => void;
+}
+
 describe("HTTP Method Decorators", () => {
   beforeEach(() => {
     // Clear metadata before each test
@@ -47,6 +60,47 @@ describe("HTTP Method Decorators", () => {
     expect(methodMetadata[0].method).toBe("getProfile");
   });
 
+  // New test for Stage 3 decorator format
+  it("should handle Stage 3 decorator format correctly", () => {
+    // We need to manually simulate the Stage 3 decorator mechanism
+    // since we can't directly use it without proper tsconfig settings
+
+    class TestController {
+      getProfile() {
+        return { id: 1, name: "John" };
+      }
+    }
+
+    // Create Stage 3 decorator context
+    const mockContext: MockClassMethodDecoratorContext = {
+      kind: "method",
+      name: "getProfile",
+      static: false,
+      private: false,
+      access: { 
+        has: () => false, 
+        get: () => undefined 
+      },
+      addInitializer: () => {}
+    };
+
+    // Manually apply the decorator to simulate Stage 3 behavior
+    const getDecorator = Get("/profile");
+    getDecorator(TestController.prototype, mockContext as any);
+
+    // Act
+    const metadataStorage = MetadataStorage.getInstance();
+    const methodMetadata = metadataStorage.getControllerMethodMetadata(
+      TestController as ClassConstructor
+    );
+
+    // Assert
+    expect(methodMetadata).toHaveLength(1);
+    expect(methodMetadata[0].httpMethod).toBe("get");
+    expect(methodMetadata[0].path).toBe("/profile");
+    expect(methodMetadata[0].method).toBe("getProfile");
+  });
+
   it("should register POST route metadata", () => {
     // Arrange
     @JSONController("/users")
@@ -69,6 +123,54 @@ describe("HTTP Method Decorators", () => {
     expect(methodMetadata[0].httpMethod).toBe("post");
     expect(methodMetadata[0].path).toBe("/create");
     expect(methodMetadata[0].method).toBe("createUser");
+  });
+
+  // New test for Stage 3 decorator format with options
+  it("should handle Stage 3 decorator format with options correctly", () => {
+    // Middleware for testing
+    const testMiddleware = (req: Request, res: Response, next: NextFunction) => {
+      next();
+    };
+
+    class TestController {
+      updateUser() {
+        return { success: true };
+      }
+    }
+
+    // Create Stage 3 decorator context
+    const mockContext: MockClassMethodDecoratorContext = {
+      kind: "method",
+      name: "updateUser",
+      static: false,
+      private: false,
+      access: { 
+        has: () => false, 
+        get: () => undefined 
+      },
+      addInitializer: () => {}
+    };
+
+    // Manually apply the decorator with options to simulate Stage 3 behavior
+    const putDecorator = Put({ 
+      path: "/update", 
+      middleware: [testMiddleware] 
+    });
+    putDecorator(TestController.prototype, mockContext as any);
+
+    // Act
+    const metadataStorage = MetadataStorage.getInstance();
+    const methodMetadata = metadataStorage.getControllerMethodMetadata(
+      TestController as ClassConstructor
+    );
+
+    // Assert
+    expect(methodMetadata).toHaveLength(1);
+    expect(methodMetadata[0].httpMethod).toBe("put");
+    expect(methodMetadata[0].path).toBe("/update");
+    expect(methodMetadata[0].method).toBe("updateUser");
+    expect(methodMetadata[0].middleware).toHaveLength(1);
+    expect(methodMetadata[0].middleware[0]).toBe(testMiddleware);
   });
 
   it("should register PUT route metadata", () => {
