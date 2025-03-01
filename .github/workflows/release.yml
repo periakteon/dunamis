@@ -86,6 +86,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Configure NPM
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+          npm config set access public
+
       - name: Release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
