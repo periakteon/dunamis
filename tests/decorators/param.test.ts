@@ -65,28 +65,6 @@ function createTestController() {
   return TestController;
 }
 
-@JSONController("/api")
-  class TestController {
-    @Get("/test")
-    testMethod(
-      @Query("q") query: string,
-      @Param("id") id: string,
-      @Body() body: any
-    ): void {
-      // Method implementation
-    }
-
-    @Get("/filter")
-    filterMethod(
-      @Query("q1") query1: string,
-      @Query("q2") query2: string,
-      @Param("id") id: string,
-      @Body() body: any
-    ): void {
-      // Method implementation
-    }
-  }
-
 describe("Parameter decorators", () => {
   let metadataStorage: MetadataStorage;
 

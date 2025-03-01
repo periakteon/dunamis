@@ -12,9 +12,9 @@
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts --sourcemap",
     "dev": "tsup src/index.ts --format esm,cjs --dts --sourcemap --watch",
-    "test": "vitest run --reporter verbose",
-    "test:watch": "vitest watch",
-    "test:coverage": "vitest run --coverage",
+    "test": "vitest run --reporter verbose --config vitest.config.mts",
+    "test:watch": "vitest watch --config vitest.config.mts",
+    "test:coverage": "vitest run --coverage --config vitest.config.mts",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\"",
