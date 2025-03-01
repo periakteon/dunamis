@@ -28,6 +28,9 @@ export * from "./types";
 // Export decorators
 export * from "./decorators";
 
+// Export Express integration
+export * from "./express";
+
 // This file will export all public API components as they are implemented
 // Future exports:
 // - Method decorators (@Get, @Post, etc.) - Coming in Step 5
