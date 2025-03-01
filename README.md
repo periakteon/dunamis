@@ -681,6 +681,8 @@ Other types that don't trigger releases:
 - `test:` - adding or correcting tests
 - `chore:` - maintenance tasks
 
+Please refer to the [semantic-release](https://github.com/semantic-release/semantic-release) documentation for more information on the release process.
+
 ## License
 
 MIT
