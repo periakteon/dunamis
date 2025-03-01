@@ -1,6 +1,6 @@
 {
   "name": "@periakteon/dunamisjs",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -25,6 +25,14 @@
   "author": "Masum Gökyüz",
   "license": "MIT",
   "description": "Minimalist framework for creating a HTTP server",
+  "keywords": [
+    "express",
+    "framework",
+    "http",
+    "server",
+    "typescript",
+    "routing-controllers"
+  ],
   "dependencies": {
     "express": "4.21.2",
     "reflect-metadata": "0.1.13",
