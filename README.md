@@ -477,6 +477,134 @@ For a complete list of all decorators and functions, see the following sections:
 
 - `createExpressApp(options)`: Creates and configures an Express application
 
+### Application Configuration
+
+The `createExpressApp` function accepts a configuration object with the following options:
+
+- **controllers** (required): Array of controller classes to register with the application
+
+  ```typescript
+  controllers: [UserController, ProductController];
+  ```
+
+- **routePrefix** (optional): Global route prefix applied to all controllers
+
+  ```typescript
+  routePrefix: "/api/v1";
+  ```
+
+- **globalMiddleware** (optional): Array of middleware functions applied to all routes
+
+  ```typescript
+  globalMiddleware: [loggingMiddleware, authMiddleware];
+  ```
+
+- **cors** (optional): CORS middleware configuration
+
+  - `true`: Enables CORS with default settings
+  - `object`: Enables CORS with custom options
+  - `false` or omitted: CORS is disabled
+
+  ```typescript
+  // Default configuration
+  cors: true
+
+  // Custom configuration
+  cors: {
+    origin: ['https://example.com', 'https://dev.example.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+  }
+  ```
+
+- **helmet** (optional): Helmet middleware for security headers
+
+  - `true`: Enables Helmet with default settings
+  - `object`: Enables Helmet with custom options
+  - `false` or omitted: Helmet is disabled
+
+  ```typescript
+  // Default configuration
+  helmet: true
+
+  // Custom configuration
+  helmet: {
+    contentSecurityPolicy: false,
+    xssFilter: true
+  }
+  ```
+
+- **bodyParser** (optional, defaults to `true`): Body parsing middleware configuration
+
+  - `true`: Enables body parsing with default settings (JSON and URL-encoded)
+  - `object`: Custom configuration for JSON and URL-encoded parsers
+  - `false`: Body parsing is disabled
+
+  ```typescript
+  // Default configuration
+  bodyParser: true
+
+  // Custom configuration
+  bodyParser: {
+    json: { limit: '10mb', strict: true },
+    urlencoded: { extended: true, limit: '10mb' }
+  }
+  ```
+
+- **logger** (optional): Request logging middleware (requires 'morgan' package)
+
+  - `true`: Enables logging with default format ('dev')
+  - `string`: Uses the specified format string
+  - `object`: Passes custom options to morgan
+  - `false` or omitted: Logging is disabled
+
+  ```typescript
+  // Default format ('dev')
+  logger: true
+
+  // Custom format
+  logger: 'combined'
+
+  // Custom options
+  logger: {
+    format: 'combined',
+    skip: (req, res) => res.statusCode < 400
+  }
+  ```
+
+- **errorHandler** (optional): Global error handling middleware
+  - `true`: Enables the default error handler
+  - `false` or omitted: No error handler is applied
+  ```typescript
+  errorHandler: true;
+  ```
+
+Example configuration:
+
+```typescript
+const app = createExpressApp({
+  controllers: [UserController, ProductController],
+  routePrefix: "/api/v1",
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  },
+  helmet: true,
+  bodyParser: {
+    json: { limit: "1mb" },
+    urlencoded: { extended: true },
+  },
+  logger: "dev",
+  errorHandler: true,
+  globalMiddleware: [
+    (req, res, next) => {
+      console.log(`Request: ${req.method} ${req.path}`);
+      next();
+    },
+  ],
+});
+```
+
 ### Controller Decorators
 
 - `@JSONController(basePath?)`: Creates a controller with JSON response type
