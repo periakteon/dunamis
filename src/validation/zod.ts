@@ -8,6 +8,17 @@ export enum ValidationType {
   PARAMS = 'params',
 }
 
+// Add custom properties to Express Request interface using module augmentation
+declare module 'express' {
+  interface Request {
+    validatedData?: {
+      body?: any;
+      query?: any;
+      params?: any;
+    };
+  }
+}
+
 export interface ValidationOptions {
   /**
    * When true, any properties not defined in the schema will be stripped from the validated object
@@ -45,8 +56,16 @@ export function createZodValidationMiddleware<T extends ZodSchema>(
   return (req: Request, _res: Response, next: NextFunction) => {
     try {
       const result = schema.parse(req[type]);
+      
       // Replace the original data with the validated (and potentially transformed) data
       req[type] = result;
+      
+      // Also store the validated data in a special property for type-safe access
+      if (!req.validatedData) {
+        req.validatedData = {};
+      }
+      req.validatedData[type] = result;
+      
       next();
     } catch (error) {
       if (error instanceof z.ZodError) {

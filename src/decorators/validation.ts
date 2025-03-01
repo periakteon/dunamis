@@ -1,5 +1,5 @@
 import { ZodSchema } from 'zod';
-import { ValidationType, ValidationOptions, createZodValidationMiddleware } from '../validation/zod';
+import { ValidationType, ValidationOptions, createZodValidationMiddleware, InferSchemaType } from '../validation/zod';
 import { getMetadataStorage } from '../utils/getMetadataStorage';
 
 /**
@@ -30,6 +30,15 @@ function createValidationDecorator(validationType: ValidationType) {
         method: propertyKey.toString(),
         middleware: createZodValidationMiddleware(schema, validationType, options),
       });
+
+      // Store schema metadata for documentation and improved typing
+      const existingMetadata = Reflect.getOwnMetadata(`zod:${validationType}`, target.constructor, propertyKey.toString()) || {};
+      Reflect.defineMetadata(
+        `zod:${validationType}`,
+        { ...existingMetadata, schema },
+        target.constructor,
+        propertyKey.toString()
+      );
 
       return descriptor;
     };
@@ -69,14 +78,23 @@ export const ValidateBody = createValidationDecorator(ValidationType.BODY);
  * @example
  * ```typescript
  * const PaginationSchema = z.object({
- *   page: z.string().transform(Number).default('1'),
- *   limit: z.string().transform(Number).default('10')
+ *   page: z.coerce.number().int().default(1),
+ *   limit: z.coerce.number().int().default(10)
  * });
  * 
  * @Get('/users')
  * @ValidateQuery(PaginationSchema)
- * getUsers(@Query() pagination: z.infer<typeof PaginationSchema>) {
- *   // pagination is fully typed and validated with defaults applied
+ * getUsers(@Query() query: z.infer<typeof PaginationSchema>) {
+ *   // query is fully typed and validated with defaults applied
+ *   return this.userService.findAll(query.page, query.limit);
+ * }
+ * 
+ * // Or for individual query params
+ * @Get('/users')
+ * @ValidateQuery(PaginationSchema)
+ * getUsers(@Query('page') page: number, @Query('limit') limit: number) {
+ *   // page and limit are validated, transformed, and type-safe
+ *   return this.userService.findAll(page, limit);
  * }
  * ```
  */
@@ -92,14 +110,22 @@ export const ValidateQuery = createValidationDecorator(ValidationType.QUERY);
  * @example
  * ```typescript
  * const UserIdSchema = z.object({
- *   id: z.string().uuid()
+ *   id: z.coerce.number().int().positive()
  * });
  * 
  * @Get('/users/:id')
  * @ValidateParams(UserIdSchema)
- * getUser(@Param('id') id: string) {
- *   // id is guaranteed to be a valid UUID
+ * getUser(@Param('id') id: number) {
+ *   // id is validated, transformed to a number, and guaranteed to be positive
+ *   return this.userService.findById(id);
  * }
  * ```
  */
-export const ValidateParams = createValidationDecorator(ValidationType.PARAMS); 
+export const ValidateParams = createValidationDecorator(ValidationType.PARAMS);
+
+/**
+ * Helper type for extracting types from validation decorators
+ * 
+ * @template S The Zod schema type
+ */
+export type ZodValidated<S extends ZodSchema> = InferSchemaType<S>; 

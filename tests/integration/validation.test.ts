@@ -7,10 +7,10 @@ import request from "supertest";
 import { createExpressApp } from "../../src/express/createExpressApp";
 import { JSONController } from "../../src/decorators/controller";
 import { Get, Post } from "../../src/decorators/method";
-import { Body, Param, Query, Req } from "../../src/decorators/param";
+import { Body, Param, Query } from "../../src/decorators/param";
 import { ValidateBody, ValidateParams, ValidateQuery } from "../../src/decorators/validation";
 import { z } from "zod";
-import { Express, Request } from "express";
+import { Express } from "express";
 
 // Define Zod schemas
 const UserSchema = z.object({
@@ -48,18 +48,18 @@ class UserController {
 
   @Get()
   @ValidateQuery(SearchSchema)
-  searchUsers(@Req() req: Request) {
-    // Using req.query which is validated through the ValidateQuery decorator
+  searchUsers(@Query() queryParams: z.infer<typeof SearchSchema>) {
+    // Using typed query parameters directly from the Query decorator
     return {
       success: true,
-      params: req.query,
+      params: queryParams,
       results: [
         { id: 1, name: "User 1" },
         { id: 2, name: "User 2" }
       ],
       pagination: {
-        page: req.query.page,
-        limit: req.query.limit,
+        page: queryParams.page,
+        limit: queryParams.limit,
         total: 2
       }
     };
@@ -176,7 +176,7 @@ describe("Zod Validation Integration", () => {
         .get("/api/users?query=test&page=2&limit=20");
 
       expect(response.status).toBe(200);
-      // Express query params are strings by default, but zod transforms them
+      // Query params are validated and transformed by Zod
       expect(response.body.params).toEqual({
         query: "test",
         page: 2,

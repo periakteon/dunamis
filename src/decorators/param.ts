@@ -112,18 +112,25 @@ export function Param(name: string, options?: ParameterOptions) {
 /**
  * Extracts a query parameter from the request.
  *
- * @param name - The name of the query parameter
+ * @param name - The name of the query parameter. If not provided, returns the entire query object.
  * @param options - Optional parameter options
  * @returns Parameter decorator
  *
  * @example
+ * // Get the entire query object
+ * @Get('/users')
+ * getUsers(@Query() query: any) {
+ *   const { page, limit } = query;
+ *   return this.userService.findAll(page, limit);
+ * }
+ * 
+ * // Get specific query parameters
  * @Get('/users')
  * getUsers(@Query('page') page: number, @Query('limit') limit: number) {
- *   // page and limit will contain the query parameters
  *   return this.userService.findAll(page, limit);
  * }
  */
-export function Query(name: string, options?: ParameterOptions) {
+export function Query(name?: string, options?: ParameterOptions) {
   return createParameterDecorator(ParameterType.QUERY, name, options);
 }
 

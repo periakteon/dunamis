@@ -265,19 +265,39 @@ export class ExpressRouteRegistry {
 
       case ParameterType.BODY:
         return req => {
-          // Return the entire body if no specific property name is provided
-          if (!name || name === '0') {
-            return req.body;
+          // First check if validated data exists
+          if (req.validatedData?.body !== undefined) {
+            // Return the entire validated body or a specific property
+            return !name || name === '0' ? req.validatedData.body : req.validatedData.body[name];
           }
-          // Otherwise return the specific property
-          return req.body?.[name];
+          
+          // Fall back to raw body if no validation was performed
+          return !name || name === '0' ? req.body : req.body?.[name];
         };
 
       case ParameterType.QUERY:
-        return req => (name ? req.query[name] : req.query);
+        return req => {
+          // Check if validatedData exists and contains query data
+          if (req.validatedData?.query !== undefined) {
+            // Return the entire validated query or a specific property
+            return !name || name === '0' ? req.validatedData.query : req.validatedData.query[name];
+          }
+          
+          // Fall back to raw query if no validation was performed
+          return !name || name === '0' ? req.query : req.query[name];
+        };
 
       case ParameterType.PARAM:
-        return req => (name ? req.params[name] : req.params);
+        return req => {
+          // First check if validated data exists
+          if (req.validatedData?.params !== undefined) {
+            // Return the entire validated params or a specific property
+            return name ? req.validatedData.params[name] : req.validatedData.params;
+          }
+          
+          // Fall back to raw params if no validation was performed
+          return name ? req.params[name] : req.params;
+        };
 
       case ParameterType.HEADERS:
         return req => (name ? req.headers[name.toLowerCase()] : req.headers);
