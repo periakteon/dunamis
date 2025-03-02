@@ -9,11 +9,9 @@
 // Require reflect-metadata at the entry point
 import "reflect-metadata";
 
-// Export version
-export const version = "1.0.0";
-
 // Export metadata storage and types
 export { MetadataStorage } from "./metadata/MetadataStorage";
+export { ParamMetadata } from "./metadata/ParamMetadata";
 export * from "./metadata/types";
 
 // Export constants

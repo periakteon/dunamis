@@ -19,7 +19,7 @@ A lightweight, decorator-based routing framework for Express.js. This library pr
 ## Installation
 
 ```bash
-npm install @periakteon/dunamisjs express@4.21.2 reflect-metadata zod
+npm install @periakteon/dunamisjs@latest express@4.21.2 reflect-metadata zod
 ```
 
 ```bash
