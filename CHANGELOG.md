@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/periakteon/dunamis/compare/v1.1.0...v1.1.1) (2025-03-02)
+
+
+### Bug Fixes
+
+* add repository information to package.json ([748aa1b](https://github.com/periakteon/dunamis/commit/748aa1ba61f01d35e40b6d36f34c8d14f77df37b))
+
 # [1.1.0](https://github.com/periakteon/dunamis/compare/v1.0.2...v1.1.0) (2025-03-02)
 
 
