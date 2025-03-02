@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src/**/*", "tests/**/*", ".eslintrc", "tsup.config.mts", "vitest.config.mts"],
+  "include": ["src/**/*", "tests/**/*", ".eslintrc", "tsup.config.ts", "vitest.config.ts"],
   "compilerOptions": {
     "rootDir": "./",
   }
