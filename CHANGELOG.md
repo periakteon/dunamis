@@ -1,3 +1,11 @@
+## [1.0.2](https://github.com/periakteon/dunamis/compare/v1.0.1...v1.0.2) (2025-03-02)
+
+
+### Bug Fixes
+
+* downgrade @swc/core and refactor build configuration ([0913d9c](https://github.com/periakteon/dunamis/commit/0913d9cc26f28209131090f8d96440eb1366513f))
+* update config file extensions from .mts to .ts ([5796a6b](https://github.com/periakteon/dunamis/commit/5796a6b5e9772036874678a1991c6711dcebe12e))
+
 ## [1.0.1](https://github.com/periakteon/dunamis/compare/v1.0.0...v1.0.1) (2025-03-01)
 
 
