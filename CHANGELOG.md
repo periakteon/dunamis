@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/periakteon/dunamis/compare/v1.0.2...v1.1.0) (2025-03-02)
+
+
+### Features
+
+* add exports configuration to package.json for better ESM support ([a86ef8a](https://github.com/periakteon/dunamis/commit/a86ef8a1f904705cc9e58d4009638e8ca6f16217))
+
 ## [1.0.2](https://github.com/periakteon/dunamis/compare/v1.0.1...v1.0.2) (2025-03-02)
 
 
