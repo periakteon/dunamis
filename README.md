@@ -19,7 +19,11 @@ A lightweight, decorator-based routing framework for Express.js. This library pr
 ## Installation
 
 ```bash
-npm install @periakteon/dunamisjs express reflect-metadata zod
+npm install @periakteon/dunamisjs express@4.21.2 reflect-metadata zod
+```
+
+```bash
+npm install ts-node -D @types/express@4.17.21 @types/node typescript
 ```
 
 You'll also need to configure TypeScript to support decorators. Add the following to your `tsconfig.json`:
@@ -27,10 +31,71 @@ You'll also need to configure TypeScript to support decorators. Add the followin
 ```json
 {
   "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   }
 }
+```
+
+Create a `package.json` file with the following:
+
+```json
+{
+  "name": "dunamis-test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --loader ts-node/esm --watch src/index.ts",
+    "build": "tsc --outDir dist",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@periakteon/dunamisjs": "^1.0.1",
+    "express": "^4.21.2",
+    "reflect-metadata": "^0.2.2",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  }
+}
+```
+
+Run the following command to install the dependencies:
+
+```bash
+npm install
+```
+
+Run the following command to start the server:
+
+```bash
+npm run dev
+```
+
+Run the following command to build the project:
+
+```bash
+npm run build
+```
+
+Run the following command to start the server:
+
+```bash
+npm run start
 ```
 
 ## Basic Usage
