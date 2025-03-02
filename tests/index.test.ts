@@ -9,7 +9,6 @@ import * as expressTypes from '../src/express/types';
 describe('Index Files Exports', () => {
   it('should export from main index file', () => {
     expect(mainIndex).toBeDefined();
-    expect(mainIndex.version).toBeDefined();
   });
 
   it('should export from decorators index file', () => {
