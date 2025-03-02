@@ -12,8 +12,8 @@ export default defineConfig({
         '**/dist/**', 
         '**/tests/**',
         '**/*.d.ts',
-        'tsup.config.mts',
-        'vitest.config.mts'
+        'tsup.config.ts',
+        'vitest.config.ts'
       ],
       thresholds: {
         lines: 80,
